@@ -1,0 +1,1 @@
+web: shopify app serve
