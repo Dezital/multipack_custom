@@ -29,19 +29,19 @@ let newhost;
 
 const pool_multipack = mysql2.createPool({
   connectionLimit: 100000,
-  user: "doadmin",
-  password: "rjZoyWV7E3gDRJJe",
+  user : "doadmin",
+  password : "rjZoyWV7E3gDRJJe",
   host: "dbaas-db-8225521-do-user-10888552-0.b.db.ondigitalocean.com",
-  port: "25060",
+  port :"25060",
   database: "multipack_creator",
 });
 
 const con = mysql2.createConnection({
   connectionLimit: 100,
-  user: "doadmin",
-  password: "rjZoyWV7E3gDRJJe",
+  user : "doadmin",
+  password : "rjZoyWV7E3gDRJJe",
   host: "dbaas-db-8225521-do-user-10888552-0.b.db.ondigitalocean.com",
-  port: "25060",
+  port :"25060",
   database: "multipack_creator",
 });
 
@@ -147,7 +147,9 @@ app.prepare().then(async () => {
     })
   );
   server.use(
+
     createShopifyAuth({
+
       async afterAuth(ctx) {
         // Access token and shop available in ctx.state.shopify
         const { shop, accessToken, scope } = ctx.state.shopify;
@@ -201,16 +203,17 @@ app.prepare().then(async () => {
   };
 
   router.post("/createMultipack", async (ctx) => {
-    const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
-    const shop = session.shop;
-    const product_name = JSON.parse(ctx.request.body).product_name;
-    const product_varient_price = JSON.parse(ctx.request.body)
-      .product_varient_price;
-    const product_varient_weight = JSON.parse(ctx.request.body)
-      .product_varient_weight;
+
+      const shop = "workplacecity.myshopify.com";
+      const session = await Shopify.Utils.loadOfflineSession(shop);
+ 
+    const product_name=JSON.parse(ctx.request.body).product_name;
+    const product_varient_price=JSON.parse(ctx.request.body).product_varient_price;
+    const product_varient_weight=JSON.parse(ctx.request.body).product_varient_weight;
     let multipackn = JSON.parse(ctx.request.body).multipackName;
-    multipackn = multipackn.replace(/[&'":*?<>{}]/g, "");
-    const multipackname = multipackn;
+    multipackn = multipackn.replace(/[&'":*?<>{}]/g, '');
+    const multipackname=multipackn;
+  
 
     const multipackquantity = JSON.parse(ctx.request.body).multipackquantity;
     const multipackprice = JSON.parse(ctx.request.body).multipackprice;
@@ -230,9 +233,9 @@ app.prepare().then(async () => {
     const OrignalProductId = JSON.parse(ctx.request.body).OrignalProductId;
     const OrginalProductVarientId = JSON.parse(ctx.request.body)
       .OrginalProductVarientId;
-    const OriginalProductSku = JSON.parse(ctx.request.body).OriginalProductSku;
-    const totalqunatityofmultipacks = JSON.parse(ctx.request.body)
-      .totalqunatityofmultipacks;
+    const OriginalProductSku=JSON.parse(ctx.request.body)
+    .OriginalProductSku;
+    const totalqunatityofmultipacks= JSON.parse(ctx.request.body).totalqunatityofmultipacks;
 
     var Newmultipackid;
     let NewProductVarientId;
@@ -347,8 +350,8 @@ app.prepare().then(async () => {
       console.log("errro in fullfilment");
     }
 
-    var currnetday = "today";
-    var lastday = "yesterday";
+    var currnetday="today"
+    var lastday="yesterday"
     pool_multipack.getConnection((err, connection) => {
       if (err) throw err;
       // console.log(`connected as id ${connection.threadId}`);
@@ -373,7 +376,7 @@ app.prepare().then(async () => {
         lastday,
         product_name,
         product_varient_price,
-        `${product_varient_weight}`,
+        `${product_varient_weight}`
       ];
 
       // execute the insert statment
@@ -416,8 +419,8 @@ app.prepare().then(async () => {
   });
 
   router.post("/deleteProduct", async (ctx) => {
-    const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
-    const shop = session.shop;
+    const shop = "workplacecity.myshopify.com";
+      const session = await Shopify.Utils.loadOfflineSession(shop);
     const multipackid = JSON.parse(ctx.request.body).multipackid;
     try {
       const client = new Shopify.Clients.Rest(
@@ -434,6 +437,8 @@ app.prepare().then(async () => {
             status: "OK",
           };
           ctx.status = 200;
+
+       
         })
         .catch((err) => console.log(err));
     } catch (err) {
@@ -447,7 +452,7 @@ app.prepare().then(async () => {
       let todo = [multipackid];
 
       // execute the insert statment
-      connection.query(stmt, todo, (err, results, fields) => {
+      connection.query(stmt,todo, (err, results, fields) => {
         if (!err) {
           console.log("results in delete", results);
         } else {
@@ -464,8 +469,8 @@ app.prepare().then(async () => {
   });
 
   router.post("/updateProduct", async (ctx) => {
-    const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
-    const shop = session.shop;
+    const shop = "workplacecity.myshopify.com";
+    const session = await Shopify.Utils.loadOfflineSession(shop);
     const multipackName = JSON.parse(ctx.request.body).multipackName;
     const multipackquantity = JSON.parse(ctx.request.body).multipackquantity;
     const multipackprice = JSON.parse(ctx.request.body).multipackprice;
@@ -474,11 +479,10 @@ app.prepare().then(async () => {
     const multipackid = JSON.parse(ctx.request.body).multipackid;
     const multipackvarientid = JSON.parse(ctx.request.body).multipackvarientid;
 
-    const totalqunatityofmultipacks = JSON.parse(ctx.request.body)
-      .totalqunatityofmultipacks;
+    const totalqunatityofmultipacks= JSON.parse(ctx.request.body).totalqunatityofmultipacks;
     var Newmultipackid;
 
-    console.log("total qty of multipack", totalqunatityofmultipacks);
+    console.log("total qty of multipack",totalqunatityofmultipacks)
 
     var StoreLocaction;
     var NewProductVarinetInventoryId;
@@ -488,31 +492,32 @@ app.prepare().then(async () => {
         session.shop,
         session.accessToken
       );
-      console.log("multipack is", multipackName);
-
+      console.log("multipack is",multipackName)
+      
       type: DataType.JSON,
-        await client
-          .put({
-            path: `products/${multipackid}`,
-            data: {
-              product: {
-                title: `${multipackName}`,
-              },
+
+      await client
+        .put({
+          path: `products/${multipackid}`,
+          data: {
+            product: {
+              title: `${multipackName}`,
             },
-            type: DataType.JSON,
-          })
+          },
+          type: DataType.JSON,
+        })
 
-          .then(({ body }) => {
-            let newvariable = body.product;
-            NewProductVarinetInventoryId =
-              newvariable.variants[0].inventory_item_id;
+        .then(({ body }) => {
 
-            ctx.body = {
-              status: "OK",
-            };
-            ctx.status = 200;
-          })
-          .catch((err) => console.log(err));
+          let newvariable = body.product;
+          NewProductVarinetInventoryId =newvariable.variants[0].inventory_item_id;
+
+          ctx.body = {
+            status: "OK",
+          };
+          ctx.status = 200;
+        })
+        .catch((err) => console.log(err));
     } catch (err) {
       console.log("Err in cath", err);
     }
@@ -548,6 +553,7 @@ app.prepare().then(async () => {
       console.log("Err in cath", err);
     }
 
+
     try {
       const client = new Shopify.Clients.Rest(
         session.shop,
@@ -557,8 +563,9 @@ app.prepare().then(async () => {
       await client
         .get({
           path: `locations`,
+        
         })
-        .then(async ({ body }) => {
+        .then(async({ body }) => {
           console.log("response body", body.locations[0].id);
           var locationid = body.locations[0].id;
           StoreLocaction = locationid;
@@ -574,10 +581,12 @@ app.prepare().then(async () => {
       console.log("Err in cath", err);
     }
 
-    console.log("id of location", StoreLocaction);
-    console.log("id of new product inventory", NewProductVarinetInventoryId);
-    console.log("id totoal available qty", totalqunatityofmultipacks);
 
+    console.log("id of location",StoreLocaction)
+    console.log("id of new product inventory",NewProductVarinetInventoryId)
+    console.log("id totoal available qty",totalqunatityofmultipacks)
+
+    
     try {
       const client = new Shopify.Clients.Rest(
         session.shop,
@@ -585,26 +594,32 @@ app.prepare().then(async () => {
       );
 
       await client
-        .post({
-          path: `inventory_levels/set`,
-          data: {
-            location_id: StoreLocaction,
-            inventory_item_id: NewProductVarinetInventoryId,
-            available: totalqunatityofmultipacks,
-          },
-          type: DataType.JSON,
-        })
+      .post({
+        path: `inventory_levels/set`,
+        data: {
+          location_id: StoreLocaction,
+          inventory_item_id: NewProductVarinetInventoryId,
+          available: totalqunatityofmultipacks,
+        },
+        type: DataType.JSON,
+      })
         .then(({ body }) => {
-          console.log("response body", { body });
-        })
-        .catch((err) => console.log(err));
-      ctx.body = {
-        status: "OK",
-      };
-      ctx.status = 200;
+          console.log("response body", {body});
+         
+
+        }).catch((err) => console.log(err))
+          ctx.body = {
+            status: "OK",
+          };
+          ctx.status = 200;
     } catch (err) {
       console.log("Err in cath", err);
     }
+
+
+
+   
+   
 
     pool_multipack.getConnection((err, connection) => {
       if (err) throw err;
@@ -618,7 +633,7 @@ app.prepare().then(async () => {
         multipackquantity,
         multipackSku,
         multipackweight,
-        multipackid,
+        multipackid
       ];
 
       // execute the insert statment
@@ -636,6 +651,7 @@ app.prepare().then(async () => {
 
       //insert into shipping
     });
+
   });
   router.post("/updatePartialTags", async (ctx) => {
     const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
@@ -856,7 +872,7 @@ app.prepare().then(async () => {
 
   cron.schedule("2 * * * *", async () => {
     console.log("running a task");
-    const shop = "scanandfulfill.myshopify.com";
+    const shop = "workplacecity.myshopify.com";
     const session = await Shopify.Utils.loadOfflineSession(shop);
     console.log("session is");
     var DatabaseProducts;
