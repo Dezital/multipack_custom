@@ -45,7 +45,7 @@ function PackCreationPage({productdata,setShowSelectedProduct}) {
     settoatlMultipackQuantity(`${nw}`)
     let multipacktitle = productdata.title + `-${quantityofMultipack}Packs`;
     setMultipackName(multipacktitle);
-    let multipackpaisa = productdata.variants[0].price * nw;
+    let multipackpaisa = productdata.variants[0].price * quantityofMultipack;
     setMultipackPrice(`${multipackpaisa}`)
     let multipackdis = productdata.descriptionHtml;
     setMultipackDiscription(multipackdis);
