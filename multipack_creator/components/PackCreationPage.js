@@ -49,7 +49,7 @@ function PackCreationPage({productdata,setShowSelectedProduct}) {
     setMultipackPrice(`${multipackpaisa}`)
     let multipackdis = productdata.descriptionHtml;
     setMultipackDiscription(multipackdis);
-    let multipackwgh = productdata.variants[0].weight * nw;
+    let multipackwgh = productdata.variants[0].weight * quantityofMultipack;
     setMultipackWeight(`${multipackwgh}`)
     let mulsku = productdata.variants[0].sku+`-${quantityofMultipack}Packs`
     setMultipackSku(`${mulsku}`)
